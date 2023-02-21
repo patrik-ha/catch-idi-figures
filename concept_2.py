@@ -4,7 +4,7 @@ from manim import *
 config.frame_size = (2000, 2000)
 
 def matrix():
-    return Tex(r"$\begin{bmatrix}0.1 & 0.6 & -0.1 & ... & 0.5 & 0.1 & 0.6 \end{bmatrix}$", fill_color=BLACK).scale(1.3)
+    return Tex(r"$\begin{bmatrix}0.1 & 0.6 & ... & -0.2 & 0.4 \end{bmatrix}$", fill_color=BLACK).scale(1.3)
 
 class Chess(MovingCameraScene):
     def construct(self):
@@ -32,9 +32,17 @@ class Chess(MovingCameraScene):
         self.add(arr)
         self.add(board)
         self.add(arr_right)
-        top_arrow = Arrow(DOWN, UP * 2, stroke_color=BLACK, fill_color=BLACK).next_to(broken, UP)
+        top_arrow = Arrow(DOWN, UP, stroke_color=BLACK, fill_color=BLACK).next_to(broken, UP)
+        matr = matrix().next_to(top_arrow, UP)
+        self.add(matr)
+        top_classifier = Tex("$Wx + b$", color=BLACK)
+        top_classifier = Group(SurroundingRectangle(top_classifier, BLACK, LARGE_BUFF), top_classifier).next_to(matr, UP)
+        self.add(top_classifier)
+        class_arrow = Arrow(DOWN, UP, stroke_color=BLACK, fill_color=BLACK).next_to(top_classifier, UP)
+        check = Text("✔", color=GREEN).next_to(class_arrow, UP)
+        self.add(class_arrow, check)
         self.add(top_arrow)
         arr_right = Arrow(LEFT, RIGHT, stroke_color=BLACK, fill_color=BLACK)
         arr_right.next_to(broken, RIGHT)
         eval = Tex("$-0.2$", color=BLACK).scale(1.5).next_to(arr_right, RIGHT)
-        self.add(matrix().next_to(top_arrow, UP), arr_right, eval)
+        self.add(arr_right, eval)
